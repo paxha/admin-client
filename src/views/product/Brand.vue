@@ -8,18 +8,17 @@
     <a-layout-content
       :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      Home
+      Brand
     </a-layout-content>
   </a-layout>
 </template>
 
 <script>
 export default {
-  name: 'Home',
-  data () {
-    return {
-      collapsed: false
-    }
-  }
+  name: 'Brand'
 }
 </script>
+
+<style scoped>
+
+</style>

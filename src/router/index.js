@@ -1,22 +1,76 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Login from '../views/Login'
+
+import store from '../store'
+import Master from '../components/layouts/Master'
+import Product from '../views/product/Product'
+import Category from '../views/product/Category'
+import Brand from '../views/product/Brand'
+import Attribute from '../views/product/Attribute'
+import Unit from '../views/product/Unit'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: '/login',
+    name: 'login',
+    component: Login,
+    beforeEnter: (to, from, next) => {
+      if (store.getters['auth/authenticated']) {
+        return next({
+          name: 'home'
+        })
+      }
+      next()
+    }
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/',
+    name: 'home',
+    component: Master,
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    },
+    children: [
+      {
+        path: '/',
+        name: 'home',
+        component: Home
+      },
+      {
+        path: '/product',
+        name: 'product',
+        component: Product
+      },
+      {
+        path: '/brand',
+        name: 'brand',
+        component: Brand
+      },
+      {
+        path: '/category',
+        name: 'category',
+        component: Category
+      },
+      {
+        path: '/attribute',
+        name: 'attribute',
+        component: Attribute
+      },
+      {
+        path: '/unit',
+        name: 'unit',
+        component: Unit
+      }
+    ]
   }
 ]
 
