@@ -104,14 +104,14 @@ export default {
       await this.form.validateFields(async (err, values) => {
         if (!err) {
           await this.login(values).then(() => {
+            this.loading = false
             this.$router.replace({
               name: 'home'
             })
-            this.loading = false
           }).catch(error => {
+            this.loading = false
             this.openNotificationWithIcon('error', error.response.data.message)
             this.error = error.response.data
-            this.loading = false
           })
         }
       })

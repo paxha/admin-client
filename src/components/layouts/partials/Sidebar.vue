@@ -1,7 +1,7 @@
 <template>
   <a-layout-sider theme="light" :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }">
     <div class="logo"/>
-    <a-menu theme="light" mode="inline" :default-selected-keys="['home']">
+    <a-menu theme="light" mode="inline" :default-selected-keys="[currentRouteName]">
       <a-menu-item key="home">
         <router-link :to="{name: 'home'}">
           <a-icon type="home"/>
@@ -41,13 +41,19 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Sidebar',
+  created () {
+    console.log(this.currentRouteName)
+  },
   computed: {
     ...mapGetters({
       modules: 'module/modules'
     }),
     ...mapActions({
       logoutAction: 'auth/logout'
-    })
+    }),
+    currentRouteName () {
+      return this.$route.name
+    }
   }
 }
 </script>
