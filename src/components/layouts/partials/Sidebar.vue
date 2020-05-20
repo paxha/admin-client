@@ -41,9 +41,6 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Sidebar',
-  created () {
-    console.log(this.currentRouteName)
-  },
   computed: {
     ...mapGetters({
       modules: 'module/modules'

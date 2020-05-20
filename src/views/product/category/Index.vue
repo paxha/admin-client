@@ -36,6 +36,12 @@
       :categoryId="categoryId"
       v-if="editVisible"
     />
+    <Show
+      :showVisible="showVisible"
+      @hideShowModal="hideShowModal"
+      :category="category"
+      v-if="showVisible"
+    />
     <a-table
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
@@ -55,7 +61,31 @@
         </a-popconfirm>
         </span>
       <span slot="active" slot-scope="text, record">
-        <a-switch :defaultChecked="record.active" @click="toggleActive(record.id)" :loading="toggleLoading === record.id"/>
+        <a-switch :defaultChecked="!!record.active" @click="toggleActive(record.id)" :loading="toggleLoading === record.id">
+          <a-icon slot="checkedChildren" type="check" />
+          <a-icon slot="unCheckedChildren" type="close" />
+        </a-switch>
+      </span>
+      <span slot="last_update" slot-scope="text, record">
+        <span>
+          <a-avatar style="backgroundColor:#87d068" icon="user" />
+          <span style="padding-left: 4px; line-height: 0;">
+            <a>{{ record.updater.name }}</a>
+            <span style="padding-left: 36px; display: block">{{ record.updated_at }}</span>
+          </span>
+        </span>
+      </span>
+      <span slot="created" slot-scope="text, record">
+        <span>
+          <a-avatar style="backgroundColor:#87d068" icon="user" />
+          <span style="padding-left: 4px; line-height: 0">
+            <a>{{ record.creator.name }}</a>
+            <span style="padding-left: 36px; display: block">{{ record.created_at }}</span>
+          </span>
+        </span>
+      </span>
+      <span slot="name" slot-scope="text, record">
+        <a @click="showShowModal(record)">{{ record.name }}</a>
       </span>
     </a-table>
   </a-layout>
@@ -66,22 +96,13 @@ import { mapGetters } from 'vuex'
 import Create from './Create'
 import Edit from './Edit'
 import axios from 'axios'
+import Show from './Show'
 
 const columns = [
   {
     title: 'Name',
-    dataIndex: 'name',
-    key: 'name'
-  },
-  {
-    title: 'Slug',
-    dataIndex: 'slug',
-    key: 'slug'
-  },
-  {
-    title: 'Icon',
-    dataIndex: 'icon',
-    key: 'icon'
+    key: 'name',
+    scopedSlots: { customRender: 'name' }
   },
   {
     title: 'Active',
@@ -90,13 +111,13 @@ const columns = [
   },
   {
     title: 'Last Update',
-    dataIndex: 'updated_at',
-    key: 'updated_at'
+    key: 'updated_at',
+    scopedSlots: { customRender: 'last_update' }
   },
   {
     title: 'Created',
-    dataIndex: 'created_at',
-    key: 'created_at'
+    key: 'created_at',
+    scopedSlots: { customRender: 'created' }
   },
   {
     title: 'Action',
@@ -107,7 +128,7 @@ const columns = [
 
 export default {
   name: 'Category',
-  components: { Edit, Create },
+  components: { Show, Edit, Create },
   beforeCreate () {
     this.$store.dispatch('category/index')
   },
@@ -118,9 +139,11 @@ export default {
       form: this.$form.createForm(this),
       createVisible: false,
       editVisible: false,
+      showVisible: false,
       parentId: null,
       categoryId: null,
-      toggleLoading: null
+      toggleLoading: null,
+      category: {}
     }
   },
   computed: {
@@ -133,7 +156,6 @@ export default {
   },
   methods: {
     onSelectChange (selectedRowKeys) {
-      console.log('selectedRowKeys changed: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
     },
     showCreateDrawer (parentId = null) {
@@ -144,11 +166,19 @@ export default {
       this.categoryId = categoryId
       this.editVisible = true
     },
+    showShowModal (category) {
+      this.category = category
+      this.showVisible = true
+    },
     hideCreateDrawer () {
       this.createVisible = false
     },
     hideEditDrawer () {
       this.editVisible = false
+    },
+    hideShowModal () {
+      console.log('adfadsfdsf')
+      this.showVisible = false
     },
     async toggleActive (id) {
       this.toggleLoading = id
