@@ -20,17 +20,9 @@
         <a-badge :status="unit.active ? 'processing' : 'error'" :text="unit.active ? 'RUNNING' : 'IDLE'" />
       </a-descriptions-item>
       <a-descriptions-item label="Attributes">
-        Data disk type: MongoDB
-        <br />
-        Database version: 3.4
-        <br />
-        Package: dds.mongo.mid
-        <br />
-        Storage space: 10 GB
-        <br />
-        Replication factor: 3
-        <br />
-        Region: East China 1<br />
+        <a-tag v-bind:key="attribute.id" v-for="attribute in unit.attributes" color="#108ee9" style="margin-top: 6px">
+          {{ attribute.name }}
+        </a-tag>
       </a-descriptions-item>
     </a-descriptions>
   </a-modal>

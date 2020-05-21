@@ -68,7 +68,7 @@
       </span>
       <span slot="last_update" slot-scope="text, record">
         <span>
-          <a-avatar :style="{backgroundColor:record.updater.color}">
+          <a-avatar :style="{backgroundColor:record.updater.color, opacity: 0.6}">
             {{ record.updater.name.charAt(0) }}
           </a-avatar>
           <span style="padding-left: 4px; line-height: 0;">
@@ -79,7 +79,7 @@
       </span>
       <span slot="created" slot-scope="text, record">
         <span>
-          <a-avatar :style="{backgroundColor:record.creator.color}">
+          <a-avatar :style="{backgroundColor:record.creator.color, opacity: 0.6}">
             {{ record.creator.name.charAt(0) }}
           </a-avatar>
           <span style="padding-left: 4px; line-height: 0">
