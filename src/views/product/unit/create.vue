@@ -1,6 +1,6 @@
 <template>
   <a-drawer
-    title="Create a new category"
+    title="Create a new unit"
     :width="720"
     :visible="createVisible"
     :body-style="{ paddingBottom: '80px' }"
@@ -8,32 +8,11 @@
   >
     <a-form :form="form" layout="vertical">
       <a-form-item
-        label="Parent Category"
-        :validate-status="!!error.errors ? (!!error.errors.parent_id ? 'error' : null) : null"
-        :help="!!error.errors ? (!!error.errors.parent_id ? error.errors.parent_id[0] : null) : null"
-      >
-        <a-tree-select
-          v-model="category.parent_id"
-          style="width: 100%"
-          :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-          :tree-data="categories"
-          placeholder="Choose a parent category"
-          :allowClear="true"
-        />
-      </a-form-item>
-      <a-form-item
-        label="Category Name"
+        label="Name"
         :validate-status="!!error.errors ? (!!error.errors.name ? 'error' : null) : null"
         :help="!!error.errors ? (!!error.errors.name ? error.errors.name[0] : null) : null"
       >
-        <a-input v-model="category.name"/>
-      </a-form-item>
-      <a-form-item
-        label="Category Icon"
-        :validate-status="!!error.errors ? (!!error.errors.icon ? 'error' : null) : null"
-        :help="!!error.errors ? (!!error.errors.icon ? error.errors.icon[0] : null) : null"
-      >
-        <a-input v-model="category.icon"/>
+        <a-input v-model="unit.name"/>
       </a-form-item>
     </a-form>
     <div
@@ -60,48 +39,40 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
-  name: 'Create',
-  props: ['createVisible', 'parentId'],
+  name: 'create',
+  props: ['createVisible'],
   data () {
     return {
       form: this.$form.createForm(this),
-      category: {},
+      unit: {},
       loading: false,
       error: {}
     }
   },
-  mounted () {
-    this.category.parent_id = this.parentId
-  },
-  computed: {
-    ...mapGetters({
-      categories: 'category/categories'
-    })
-  },
   methods: {
     ...mapActions({
-      createAction: 'category/create'
+      createAction: 'unit/create'
     }),
     onClose () {
-      this.category = {}
+      this.unit = {}
       this.$emit('hideCreateDrawer')
     },
     async create () {
       this.loading = true
-      await this.createAction(this.category).then(() => {
+      await this.createAction(this.unit).then(() => {
         this.loading = false
         this.onClose()
         this.$notification.success({
-          message: 'Category successfully created',
-          description: 'Category successfully created'
+          message: 'Unit successfully created',
+          description: 'Unit successfully created'
         })
       }).catch(error => {
         this.loading = false
         this.$notification.error({
-          message: 'Category failed to create',
+          message: 'Unit failed to create',
           description: error.response.data.message
         })
         this.error = error.response.data

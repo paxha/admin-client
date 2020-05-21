@@ -68,7 +68,9 @@
       </span>
       <span slot="last_update" slot-scope="text, record">
         <span>
-          <a-avatar style="backgroundColor:#87d068" icon="user" />
+          <a-avatar :style="{backgroundColor:record.updater.color}">
+            {{ record.updater.name.charAt(0) }}
+          </a-avatar>
           <span style="padding-left: 4px; line-height: 0;">
             <a>{{ record.updater.name }}</a>
             <span style="padding-left: 36px; display: block">{{ record.updated_at }}</span>
@@ -77,7 +79,9 @@
       </span>
       <span slot="created" slot-scope="text, record">
         <span>
-          <a-avatar style="backgroundColor:#87d068" icon="user" />
+          <a-avatar :style="{backgroundColor:record.creator.color}">
+            {{ record.creator.name.charAt(0) }}
+          </a-avatar>
           <span style="padding-left: 4px; line-height: 0">
             <a>{{ record.creator.name }}</a>
             <span style="padding-left: 36px; display: block">{{ record.created_at }}</span>
@@ -93,10 +97,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Create from './Create'
-import Edit from './Edit'
+import Create from './create'
+import Edit from './edit'
 import axios from 'axios'
-import Show from './Show'
+import Show from './show'
 
 const columns = [
   {
@@ -127,7 +131,7 @@ const columns = [
 ]
 
 export default {
-  name: 'Category',
+  name: 'index',
   components: { Show, Edit, Create },
   beforeCreate () {
     this.$store.dispatch('category/index')
@@ -162,7 +166,7 @@ export default {
       this.parentId = parentId
       this.createVisible = true
     },
-    showEditDrawer (categoryId = null) {
+    showEditDrawer (categoryId) {
       this.categoryId = categoryId
       this.editVisible = true
     },
@@ -177,7 +181,6 @@ export default {
       this.editVisible = false
     },
     hideShowModal () {
-      console.log('adfadsfdsf')
       this.showVisible = false
     },
     async toggleActive (id) {
