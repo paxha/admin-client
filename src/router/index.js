@@ -8,7 +8,7 @@ import Master from '../components/layouts/Master'
 import Product from '../views/product/Product'
 import Category from '../views/product/category'
 import Brand from '../views/product/Brand'
-import Attribute from '../views/product/Attribute'
+import Attribute from '../views/product/attribute'
 import Unit from '../views/product/unit'
 
 Vue.use(VueRouter)

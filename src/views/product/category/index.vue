@@ -69,22 +69,11 @@
       <span slot="last_update" slot-scope="text, record">
         <span>
           <a-avatar :style="{backgroundColor:record.updater.color, opacity: 0.6}">
-            {{ record.updater.name.charAt(0) }}
+            {{ record.updater.name.charAt(0).toUpperCase() }}
           </a-avatar>
           <span style="padding-left: 4px; line-height: 0;">
             <a>{{ record.updater.name }}</a>
             <span style="padding-left: 36px; display: block">{{ record.updated_at }}</span>
-          </span>
-        </span>
-      </span>
-      <span slot="created" slot-scope="text, record">
-        <span>
-          <a-avatar :style="{backgroundColor:record.creator.color, opacity: 0.6}">
-            {{ record.creator.name.charAt(0) }}
-          </a-avatar>
-          <span style="padding-left: 4px; line-height: 0">
-            <a>{{ record.creator.name }}</a>
-            <span style="padding-left: 36px; display: block">{{ record.created_at }}</span>
           </span>
         </span>
       </span>
@@ -117,11 +106,6 @@ const columns = [
     title: 'Last Update',
     key: 'updated_at',
     scopedSlots: { customRender: 'last_update' }
-  },
-  {
-    title: 'Created',
-    key: 'created_at',
-    scopedSlots: { customRender: 'created' }
   },
   {
     title: 'Action',

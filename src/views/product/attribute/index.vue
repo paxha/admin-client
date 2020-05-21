@@ -16,7 +16,7 @@
       </a-popconfirm>
       <a-button type="primary" style="margin-left: 8px" @click="showCreateDrawer()">
         <a-icon type="plus"/>
-        New unit
+        New attribute
       </a-button>
       <span style="margin-left: 8px">
         <template v-if="hasSelected">
@@ -32,19 +32,19 @@
     <Edit
       :editVisible="editVisible"
       @hideEditDrawer="hideEditDrawer"
-      :unitId="unitId"
+      :attributeId="attributeId"
       v-if="editVisible"
     />
     <Show
       :showVisible="showVisible"
       @hideShowModal="hideShowModal"
-      :unit="unit"
+      :attribute="attribute"
       v-if="showVisible"
     />
     <a-table
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
-      :data-source="units"
+      :data-source="attributes"
       tableLayout="_"
     >
         <span slot="action" slot-scope="text, record">
@@ -115,7 +115,7 @@ export default {
   name: 'index',
   components: { Show, Edit, Create },
   beforeCreate () {
-    this.$store.dispatch('unit/index')
+    this.$store.dispatch('attribute/index')
   },
   data () {
     return {
@@ -125,14 +125,14 @@ export default {
       createVisible: false,
       editVisible: false,
       showVisible: false,
-      unitId: null,
+      attributeId: null,
       toggleLoading: null,
-      unit: {}
+      attribute: {}
     }
   },
   computed: {
     ...mapGetters({
-      units: 'unit/units'
+      attributes: 'attribute/attributes'
     }),
     hasSelected () {
       return this.selectedRowKeys.length > 0
@@ -145,12 +145,12 @@ export default {
     showCreateDrawer () {
       this.createVisible = true
     },
-    showEditDrawer (unitId) {
-      this.unitId = unitId
+    showEditDrawer (attributeId) {
+      this.attributeId = attributeId
       this.editVisible = true
     },
-    showShowModal (unit) {
-      this.unit = unit
+    showShowModal (attribute) {
+      this.attribute = attribute
       this.showVisible = true
     },
     hideCreateDrawer () {
@@ -164,9 +164,9 @@ export default {
     },
     async toggleActive (id) {
       this.toggleLoading = id
-      await axios.get(`unit/${id}/toggle-active`).then(response => {
+      await axios.get(`attribute/${id}/toggle-active`).then(response => {
         this.toggleLoading = null
-        this.$store.dispatch('unit/index')
+        this.$store.dispatch('attribute/index')
         this.$notification.success({
           message: response.data.message,
           description: response.data.message
@@ -180,32 +180,32 @@ export default {
       })
     },
     async onDelete (id) {
-      await axios.delete(`unit/${id}/delete`).then(() => {
-        this.$store.dispatch('unit/index')
+      await axios.delete(`attribute/${id}/delete`).then(() => {
+        this.$store.dispatch('attribute/index')
         this.$notification.success({
-          message: 'Unit successfully deleted',
-          description: 'Unit successfully deleted'
+          message: 'Attribute successfully deleted',
+          description: 'Attribute successfully deleted'
         })
       }).catch(error => {
         this.$notification.error({
-          message: 'Unit failed to delete',
+          message: 'Attribute failed to delete',
           description: error.response.data.message
         })
       })
     },
     async onManyDelete () {
-      await axios.delete('units/delete', {
-        data: { units: this.selectedRowKeys }
+      await axios.delete('attributes/delete', {
+        data: { attributes: this.selectedRowKeys }
       }).then(() => {
         this.selectedRowKeys = []
-        this.$store.dispatch('unit/index')
+        this.$store.dispatch('attribute/index')
         this.$notification.success({
-          message: 'Units successfully deleted',
-          description: 'Units successfully deleted'
+          message: 'Attributes successfully deleted',
+          description: 'Attributes successfully deleted'
         })
       }).catch(error => {
         this.$notification.error({
-          message: 'Units failed to delete',
+          message: 'Attributes failed to delete',
           description: error.response.data.message
         })
       })

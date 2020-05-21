@@ -13,7 +13,8 @@
         :help="!!error.errors ? (!!error.errors.parent_id ? error.errors.parent_id[0] : null) : null"
       >
         <a-tree-select
-          v-model="category.parent_id"
+          :defaultValue="parentId"
+          @change="onParentIdChange"
           style="width: 100%"
           :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
           :tree-data="categories"
@@ -68,13 +69,11 @@ export default {
   data () {
     return {
       form: this.$form.createForm(this),
+      newParentId: null,
       category: {},
       loading: false,
       error: {}
     }
-  },
-  mounted () {
-    this.category.parent_id = this.parentId
   },
   computed: {
     ...mapGetters({
@@ -89,8 +88,12 @@ export default {
       this.category = {}
       this.$emit('hideCreateDrawer')
     },
+    onParentIdChange (parentId) {
+      this.newParentId = parentId
+    },
     async create () {
       this.loading = true
+      this.category.parent_id = this.newParentId || this.parentId
       await this.createAction(this.category).then(() => {
         this.loading = false
         this.onClose()

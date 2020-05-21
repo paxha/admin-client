@@ -5,6 +5,7 @@ import auth from './auth'
 import module from './module'
 import category from './category'
 import unit from './unit'
+import attribute from './attribute'
 
 Vue.use(Vuex)
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     auth,
     module,
     category,
-    unit
+    unit,
+    attribute
   }
 })

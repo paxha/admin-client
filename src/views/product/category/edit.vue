@@ -53,7 +53,7 @@
         Cancel
       </a-button>
       <a-button type="primary" @click="update" :loading="loading">
-        Create
+        Update
       </a-button>
     </div>
   </a-drawer>
