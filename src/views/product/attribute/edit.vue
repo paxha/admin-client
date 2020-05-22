@@ -132,8 +132,9 @@ export default {
     },
     async update () {
       this.loading = true
-      this.attribute.categories = this.newSelectedCategories || this.selectedCategories
-      this.attribute.units = this.newSelectedUnits || this.selectedUnits
+      console.log('abc', this.newSelectedUnits.length > 0 ? this.newSelectedUnits : this.selectedUnits)
+      this.attribute.categories = this.newSelectedCategories.length > 0 ? this.newSelectedCategories : this.selectedCategories
+      this.attribute.units = this.newSelectedUnits.length > 0 ? this.newSelectedUnits : this.selectedUnits
       await axios.put(`attribute/${this.attribute.id}/update`, this.attribute).then(() => {
         this.$store.dispatch('attribute/index')
         this.loading = false
