@@ -15,6 +15,26 @@
         <a-input v-model="attribute.name"/>
       </a-form-item>
       <a-form-item
+        label="Type"
+        :validate-status="!!error.errors ? (!!error.errors.type ? 'error' : null) : null"
+        :help="!!error.errors ? (!!error.errors.type ? error.errors.type[0] : null) : null"
+      >
+        <a-select
+          default-value="text"
+          @change="handleTypeChange"
+        >
+          <a-select-option value="text">
+            Text
+          </a-select-option>
+          <a-select-option value="number">
+            Number
+          </a-select-option>
+          <a-select-option value="image">
+            Image
+          </a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item
         label="Categories"
         :validate-status="!!error.errors ? (!!error.errors.categories ? 'error' : null) : null"
         :help="!!error.errors ? (!!error.errors.categories ? error.errors.categories[0] : null) : null"
@@ -103,6 +123,9 @@ export default {
     onClose () {
       this.attribute = {}
       this.$emit('hideCreateDrawer')
+    },
+    handleTypeChange (selectedType) {
+      this.attribute.type = selectedType
     },
     handleCategoryChange (selectedCategories) {
       this.attribute.categories = selectedCategories

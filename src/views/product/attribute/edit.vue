@@ -15,6 +15,26 @@
         <a-input v-model="attribute.name"/>
       </a-form-item>
       <a-form-item
+        label="Type"
+        :validate-status="!!error.errors ? (!!error.errors.type ? 'error' : null) : null"
+        :help="!!error.errors ? (!!error.errors.type ? error.errors.type[0] : null) : null"
+      >
+        <a-select
+          default-value="text"
+          v-model="attribute.type"
+        >
+          <a-select-option value="text">
+            Text
+          </a-select-option>
+          <a-select-option value="number">
+            Number
+          </a-select-option>
+          <a-select-option value="image">
+            Image
+          </a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item
         label="Categories"
         :validate-status="!!error.errors ? (!!error.errors.categories ? 'error' : null) : null"
         :help="!!error.errors ? (!!error.errors.categories ? error.errors.categories[0] : null) : null"
@@ -132,7 +152,6 @@ export default {
     },
     async update () {
       this.loading = true
-      console.log('abc', this.newSelectedUnits.length > 0 ? this.newSelectedUnits : this.selectedUnits)
       this.attribute.categories = this.newSelectedCategories.length > 0 ? this.newSelectedCategories : this.selectedCategories
       this.attribute.units = this.newSelectedUnits.length > 0 ? this.newSelectedUnits : this.selectedUnits
       await axios.put(`attribute/${this.attribute.id}/update`, this.attribute).then(() => {
