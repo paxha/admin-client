@@ -1,8 +1,11 @@
 <template>
   <a-modal v-model="showVisible" title="Attribute info" @ok="onClose" @cancel="onClose" :centered="true" :afterClose="onClose">
     <a-descriptions bordered>
-      <a-descriptions-item label="Name" :span="3">
+      <a-descriptions-item label="Name" :span="1.5">
         {{ attribute.name }}
+      </a-descriptions-item>
+      <a-descriptions-item label="Type" :span="1.5">
+        {{ attribute.type }}
       </a-descriptions-item>
       <a-descriptions-item label="Updated By" :span="1.5">
         {{ attribute.updater.name }}

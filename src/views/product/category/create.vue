@@ -6,37 +6,66 @@
     :body-style="{ paddingBottom: '80px' }"
     @close="onClose"
   >
-    <a-form :form="form" layout="vertical">
-      <a-form-item
-        label="Parent Category"
-        :validate-status="!!error.errors ? (!!error.errors.parent_id ? 'error' : null) : null"
-        :help="!!error.errors ? (!!error.errors.parent_id ? error.errors.parent_id[0] : null) : null"
-      >
-        <a-tree-select
-          :defaultValue="parentId"
-          @change="onParentIdChange"
-          style="width: 100%"
-          :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-          :tree-data="categories"
-          placeholder="Choose a parent category"
-          :allowClear="true"
-        />
-      </a-form-item>
-      <a-form-item
-        label="Category Name"
-        :validate-status="!!error.errors ? (!!error.errors.name ? 'error' : null) : null"
-        :help="!!error.errors ? (!!error.errors.name ? error.errors.name[0] : null) : null"
-      >
-        <a-input v-model="category.name"/>
-      </a-form-item>
-      <a-form-item
-        label="Category Icon"
-        :validate-status="!!error.errors ? (!!error.errors.icon ? 'error' : null) : null"
-        :help="!!error.errors ? (!!error.errors.icon ? error.errors.icon[0] : null) : null"
-      >
-        <a-input v-model="category.icon"/>
-      </a-form-item>
-    </a-form>
+    <a-tabs default-active-key="1">
+      <a-tab-pane key="1" tab="Basics">
+        <a-form :form="form" layout="vertical">
+          <a-form-item
+            label="Parent Category"
+            :validate-status="!!error.errors ? (!!error.errors.parent_id ? 'error' : null) : null"
+            :help="!!error.errors ? (!!error.errors.parent_id ? error.errors.parent_id[0] : null) : null"
+          >
+            <a-tree-select
+              :defaultValue="parentId"
+              @change="onParentIdChange"
+              style="width: 100%"
+              :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+              :tree-data="categories"
+              placeholder="Choose a parent category"
+              :allowClear="true"
+            />
+          </a-form-item>
+          <a-form-item
+            label="Category Name"
+            :validate-status="!!error.errors ? (!!error.errors.name ? 'error' : null) : null"
+            :help="!!error.errors ? (!!error.errors.name ? error.errors.name[0] : null) : null"
+          >
+            <a-input v-model="category.name"/>
+          </a-form-item>
+          <a-form-item
+            label="Category Icon"
+            :validate-status="!!error.errors ? (!!error.errors.icon ? 'error' : null) : null"
+            :help="!!error.errors ? (!!error.errors.icon ? error.errors.icon[0] : null) : null"
+          >
+            <a-input v-model="category.icon"/>
+          </a-form-item>
+        </a-form>
+      </a-tab-pane>
+      <a-tab-pane key="2" tab="SEO">
+        <a-form :form="form" layout="vertical">
+          <a-form-item
+            label="Meta Title"
+            :validate-status="!!error.errors ? (!!error.errors.meta_title ? 'error' : null) : null"
+            :help="!!error.errors ? (!!error.errors.meta_title ? error.errors.meta_title[0] : null) : null"
+          >
+            <a-input v-model="category.meta_title" placeholder="Meta Title" allow-clear/>
+          </a-form-item>
+          <a-form-item
+            label="Meta Keywords"
+            :validate-status="!!error.errors ? (!!error.errors.meta_keywords ? 'error' : null) : null"
+            :help="!!error.errors ? (!!error.errors.meta_keywords ? error.errors.meta_keywords[0] : null) : null"
+          >
+            <a-textarea v-model="category.meta_keywords" placeholder="Meta Keywords" allow-clear/>
+          </a-form-item>
+          <a-form-item
+            label="Meta Description"
+            :validate-status="!!error.errors ? (!!error.errors.meta_description ? 'error' : null) : null"
+            :help="!!error.errors ? (!!error.errors.meta_description ? error.errors.meta_description[0] : null) : null"
+          >
+            <a-textarea v-model="category.meta_description" placeholder="Meta Keywords" allow-clear/>
+          </a-form-item>
+        </a-form>
+      </a-tab-pane>
+    </a-tabs>
     <div
       :style="{
           position: 'absolute',

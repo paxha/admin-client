@@ -6,6 +6,7 @@ import module from './module'
 import category from './category'
 import unit from './unit'
 import attribute from './attribute'
+import brand from './brand'
 
 Vue.use(Vuex)
 
@@ -21,6 +22,7 @@ export default new Vuex.Store({
     module,
     category,
     unit,
-    attribute
+    attribute,
+    brand
   }
 })
