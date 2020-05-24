@@ -29,7 +29,7 @@
             <a-badge :status="brand.active ? 'processing' : 'error'" :text="brand.active ? 'RUNNING' : 'IDLE'"/>
           </a-descriptions-item>
           <a-descriptions-item label="Popular" :span="3">
-            <a-badge :status="brand.active ? 'success' : 'warning'" :text="brand.active ? 'POPULAR' : 'NON POPULAR'"/>
+            <a-badge :status="brand.popular ? 'success' : 'warning'" :text="brand.popular ? 'POPULAR' : 'NON POPULAR'"/>
           </a-descriptions-item>
           <a-descriptions-item label="Description" :span="3">
             {{ brand.description }}
@@ -39,19 +39,26 @@
       <a-tab-pane key="2" tab="Images">
         <a-descriptions bordered>
           <a-descriptions-item label="Logo" :span="3">
-            <img
+            <img v-if="brand.logo"
               width="100%"
               height="200"
               alt="example"
               :src="brand.logo"
             />
+            <div v-else>
+              No Logo
+            </div>
           </a-descriptions-item>
           <a-descriptions-item label="Cover" :span="3">
             <img
+              v-if="brand.cover"
               width="100%"
               alt="example"
-              :src="brand.logo"
+              :src="brand.cover"
             />
+            <div v-else>
+              No Cover
+            </div>
           </a-descriptions-item>
         </a-descriptions>
       </a-tab-pane>
