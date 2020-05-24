@@ -6,12 +6,7 @@
           Home
         </router-link>
       </a-breadcrumb-item>
-      <a-breadcrumb-item>
-        <router-link :to="{name: 'product'}">
-          Product
-        </router-link>
-      </a-breadcrumb-item>
-      <a-breadcrumb-item>Unit</a-breadcrumb-item>
+      <a-breadcrumb-item>Product</a-breadcrumb-item>
     </a-breadcrumb>
     <div style="margin-bottom: 16px">
       <a-popconfirm
@@ -24,7 +19,7 @@
       </a-popconfirm>
       <a-button type="primary" style="margin-left: 8px" @click="showCreateDrawer()">
         <a-icon type="plus"/>
-        New unit
+        New product
       </a-button>
       <span style="margin-left: 8px">
         <template v-if="hasSelected">
@@ -32,27 +27,10 @@
         </template>
       </span>
     </div>
-    <Create
-      :createVisible="createVisible"
-      @hideCreateDrawer="hideCreateDrawer"
-      v-if="createVisible"
-    />
-    <Edit
-      :editVisible="editVisible"
-      @hideEditDrawer="hideEditDrawer"
-      :unitId="unitId"
-      v-if="editVisible"
-    />
-    <Show
-      :showVisible="showVisible"
-      @hideShowModal="hideShowModal"
-      :unit="unit"
-      v-if="showVisible"
-    />
     <a-table
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
-      :data-source="units"
+      :data-source="variations"
       tableLayout="_"
     >
         <span slot="action" slot-scope="text, record">
@@ -65,6 +43,12 @@
           <a href="javascript:">Delete</a>
         </a-popconfirm>
         </span>
+      <span slot="continue" slot-scope="text, record">
+        <a-switch :defaultChecked="!!record.continue" @click="toggleContinue(record.id)" :loading="toggleContinueLoading === record.id">
+          <a-icon slot="checkedChildren" type="check" />
+          <a-icon slot="unCheckedChildren" type="close" />
+        </a-switch>
+      </span>
       <span slot="active" slot-scope="text, record">
         <a-switch :defaultChecked="!!record.active" @click="toggleActive(record.id)" :loading="toggleLoading === record.id">
           <a-icon slot="checkedChildren" type="check" />
@@ -91,16 +75,23 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Create from './create'
-import Edit from './edit'
 import axios from 'axios'
-import Show from './show'
 
 const columns = [
   {
     title: 'Name',
     key: 'name',
     scopedSlots: { customRender: 'name' }
+  },
+  {
+    title: 'Sale Price',
+    dataIndex: 'price',
+    key: 'price'
+  },
+  {
+    title: 'Continue',
+    key: 'continue',
+    scopedSlots: { customRender: 'continue' }
   },
   {
     title: 'Active',
@@ -121,26 +112,21 @@ const columns = [
 
 export default {
   name: 'index',
-  components: { Show, Edit, Create },
   beforeCreate () {
-    this.$store.dispatch('unit/index')
+    this.$store.dispatch('variation/index')
   },
   data () {
     return {
       columns,
       selectedRowKeys: [],
       form: this.$form.createForm(this),
-      createVisible: false,
-      editVisible: false,
-      showVisible: false,
-      unitId: null,
       toggleLoading: null,
-      unit: {}
+      toggleContinueLoading: null
     }
   },
   computed: {
     ...mapGetters({
-      units: 'unit/units'
+      variations: 'variation/variations'
     }),
     hasSelected () {
       return this.selectedRowKeys.length > 0
@@ -150,31 +136,11 @@ export default {
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
-    showCreateDrawer () {
-      this.createVisible = true
-    },
-    showEditDrawer (unitId) {
-      this.unitId = unitId
-      this.editVisible = true
-    },
-    showShowModal (unit) {
-      this.unit = unit
-      this.showVisible = true
-    },
-    hideCreateDrawer () {
-      this.createVisible = false
-    },
-    hideEditDrawer () {
-      this.editVisible = false
-    },
-    hideShowModal () {
-      this.showVisible = false
-    },
     async toggleActive (id) {
       this.toggleLoading = id
-      await axios.get(`unit/${id}/toggle-active`).then(response => {
+      await axios.get(`variation/${id}/toggle-active`).then(response => {
         this.toggleLoading = null
-        this.$store.dispatch('unit/index')
+        this.$store.dispatch('variation/index')
         this.$notification.success({
           message: response.data.message,
           description: response.data.message
@@ -187,33 +153,50 @@ export default {
         })
       })
     },
-    async onDelete (id) {
-      await axios.delete(`unit/${id}/delete`).then(() => {
-        this.$store.dispatch('unit/index')
+    async toggleContinue (id) {
+      this.toggleContinueLoading = id
+      await axios.get(`variation/${id}/toggle-continue`).then(response => {
+        this.toggleContinueLoading = null
+        this.$store.dispatch('variation/index')
         this.$notification.success({
-          message: 'Unit successfully deleted',
-          description: 'Unit successfully deleted'
+          message: response.data.message,
+          description: response.data.message
+        })
+      }).then(error => {
+        this.toggleVariationLoading = null
+        this.$notification.success({
+          message: error.response.data.message,
+          description: error.response.data.message
+        })
+      })
+    },
+    async onDelete (id) {
+      await axios.delete(`variation/${id}/delete`).then(() => {
+        this.$store.dispatch('variation/index')
+        this.$notification.success({
+          message: 'Variation successfully deleted',
+          description: 'Variation successfully deleted'
         })
       }).catch(error => {
         this.$notification.error({
-          message: 'Unit failed to delete',
+          message: 'Variation failed to delete',
           description: error.response.data.message
         })
       })
     },
     async onManyDelete () {
-      await axios.delete('units/delete', {
-        data: { units: this.selectedRowKeys }
+      await axios.delete('variations/delete', {
+        data: { variations: this.selectedRowKeys }
       }).then(() => {
         this.selectedRowKeys = []
-        this.$store.dispatch('unit/index')
+        this.$store.dispatch('variation/index')
         this.$notification.success({
-          message: 'Units successfully deleted',
-          description: 'Units successfully deleted'
+          message: 'Variations successfully deleted',
+          description: 'Variations successfully deleted'
         })
       }).catch(error => {
         this.$notification.error({
-          message: 'Units failed to delete',
+          message: 'Variations failed to delete',
           description: error.response.data.message
         })
       })

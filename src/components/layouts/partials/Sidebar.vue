@@ -1,6 +1,6 @@
 <template>
-  <a-layout-sider theme="light" :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }">
-    <div class="logo"/>
+  <a-layout-sider width="260" theme="light" :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }">
+    <div class="logo" />
     <a-menu theme="light" mode="inline" :default-selected-keys="[currentRouteName]">
       <a-menu-item key="home">
         <router-link :to="{name: 'home'}">

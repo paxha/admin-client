@@ -1,9 +1,17 @@
 <template>
   <a-layout style="padding: 0 24px 24px" :style="{marginTop: '64px'}">
     <a-breadcrumb style="margin: 16px 0">
-      <a-breadcrumb-item>Home</a-breadcrumb-item>
-      <a-breadcrumb-item>List</a-breadcrumb-item>
-      <a-breadcrumb-item>App</a-breadcrumb-item>
+      <a-breadcrumb-item>
+        <router-link :to="{name: 'home'}">
+          Home
+        </router-link>
+      </a-breadcrumb-item>
+      <a-breadcrumb-item>
+        <router-link :to="{name: 'product'}">
+          Product
+        </router-link>
+      </a-breadcrumb-item>
+      <a-breadcrumb-item>Category</a-breadcrumb-item>
     </a-breadcrumb>
     <div style="margin-bottom: 16px">
       <a-popconfirm

@@ -1,7 +1,7 @@
 <template>
   <a-layout id="components-layout-demo-fixed-sider">
     <Sidebar/>
-    <a-layout :style="{ marginLeft: '200px' }">
+    <a-layout :style="{ marginLeft: '260px' }">
       <Header/>
       <router-view></router-view>
     </a-layout>

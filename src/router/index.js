@@ -5,7 +5,7 @@ import Login from '../views/Login'
 
 import store from '../store'
 import Master from '../components/layouts/Master'
-import Product from '../views/product/Product'
+import Product from '../views/product/product'
 import Category from '../views/product/category'
 import Brand from '../views/product/brand'
 import Attribute from '../views/product/attribute'
